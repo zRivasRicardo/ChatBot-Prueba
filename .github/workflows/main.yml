@@ -1,0 +1,54 @@
+on: [push]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    name: Run Test Github Actions
+    steps:
+    - name: Iniciamos Servicio Grid
+      uses: Xotabu4/selenoid-github-action@v2
+      with:
+        selenoid-start-arguments: |
+          --args "-timeout 180s" --browser-env "LANG=ES"  
+    - uses: actions/checkout@v1
+    - name: Configuramos Ambiente Python 3.9
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.9
+    - name: Instalacion Dependencias Ejecucion
+      run: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install
+        pip install -r requirements.txt
+    - name: Instalacion Dependencias Reporte
+      run: |
+        cd helper/vendor
+        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
+        unzip allure-commandline-2.13.6.zip
+        rm allure-commandline-2.13.6.zip
+        cd ../../
+    - name: Ejecucion Tests
+      run: python ./executions.py -e HU-16.1
+      env:
+        EXECUTION_TYPE: "hub"
+        SELENIUM_HUB_IP: "localhost"
+        EXECUTION_PARALLEL : "false"
+        BROWSER: "chrome"
+        BROWSER_VERSION_SELENIUM: "102.0"
+        RELOADBROWSER: "true"
+        EXECUTE_ALLURE: "true"
+        SAVE_REPORT_ALLURE: "false"
+        CLEAN_EXTRAS_REPORT_ALLURE: "true"
+        EXECUTE_RERUN==: "false"
+        COUNT==: 0
+        REPEAT: 2
+        FAILED_SCENARIO_ARRAY: "[]"
+        WIDTH_RESOLUTION: 1300
+        HEIGHT_RESOLUTION: 900
+    - name: Upload Artefacto Reporte
+      uses: actions/upload-artifact@v3
+      with:
+        name: report
+        path: report/hakalab_report.html
+        retention-days: 1

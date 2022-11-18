@@ -1,0 +1,67 @@
+variables:
+    BROWSER: "chrome"
+    EXECUTION_TYPE: "hub"
+    SELENIUM_HUB_IP : "selenium__standalone-chrome"
+    WIDTH_RESOLUTION: "1300"
+    HEIGHT_RESOLUTION: "900"
+    RELOADBROWSER: "false"
+    USER_SAUCELAB: ""
+    TOKEN_SAUCELAB: ""
+    HOST_SAUCELAB: ""
+    BROWSER_VERSION_SELENIUM: ""
+    PLATFORM_NAME_SELENIUM: ""
+    EXECUTE_ALLURE: "true"
+    SAVE_REPORT_ALLURE: "true"
+    CLEAN_EXTRAS_REPORT_ALLURE: "true"
+    EXECUTION_PARALLEL: "true"
+    EXECUTE_RERUN: "false"
+    COUNT: "0"
+    REPEAT: "2"
+    FAILED_SCENARIO_ARRAY: "[]"
+
+stages:
+  - test
+  - deploy
+
+test.chrome:
+  stage: test
+  image: python:3.9
+  services:
+    - name: selenium/standalone-chrome:latest
+  before_script:
+    - apt -y update
+    - apt -y upgrade
+    - apt-get -y install default-jre
+    - apt -y install wget
+    - apt-get -y update
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - cd helper/vendor
+    - wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
+    - unzip allure-commandline-2.13.6.zip
+    - rm allure-commandline-2.13.6.zip
+    - cd ../../
+    - behave -f allure_behave.formatter:AllureFormatter -o reporte -t "@formulario_basico"
+    - mv ./report ./report_chrome
+  artifacts:
+#    when: always
+    expire_in: 48 hrs
+    paths:
+      - report_chrome/
+  only:
+    - web_base
+
+pages:
+  stage: deploy
+  script:
+    - mkdir public
+    - mv ./report_chrome ./public/
+  dependencies:
+    - test.chrome
+  artifacts:
+    paths:
+      - public
+  only:
+    - web_base
+

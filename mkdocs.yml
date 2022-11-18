@@ -1,0 +1,17 @@
+site_name: Hakalab doc
+theme:
+    name: material
+nav:
+    - Home: index.md
+    - Selenium-Elements: selenium_elements.md
+plugins:
+- mkdocstrings:
+    default_handler: python
+    handlers:
+      python:
+        rendering:
+          show_source: true
+    custom_templates: templates
+    
+
+

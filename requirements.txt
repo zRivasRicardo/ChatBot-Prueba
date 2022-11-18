@@ -1,0 +1,11 @@
+# Basic Web arquetype
+behave~=1.2.6
+selenium~=4.1.3
+allure-behave~=2.9.45
+
+# Utilities
+virtualenv~=20.14.0
+python-dotenv~=0.20.0
+
+#combine
+beautifulsoup4~=4.10.0
