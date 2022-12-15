@@ -2,7 +2,7 @@
 Feature: historia hu-1
   Validar funcionalidad de formularios en hakatools
 
-  @HU-1 @hakatools @formulario_basico
+  @hakatools @formulario_basico
   Scenario Outline: Valido formulario basico en hakatools
     Given ingreso a hakatools
     When selecciono la lista "Formularios"
@@ -12,7 +12,13 @@ Feature: historia hu-1
     And ingreso direccion permanente <direccion_permanente>
     And selecciono opcion enviar
     Then valido resultados de formulario <usuario><correo><direccion><direccion_permanente>
-  Examples:
+  @HU-2
+  Examples: ejecucion combinatoria 1
+    | usuario   | correo                | direccion           | direccion_permanente            |
+    | "Hakito"  | "hakito@hakalab.com"  | "calle prueba 123"  | "calle permanente prueba 123 "  |
+
+  @HU-3
+  Examples: ejecucion combinatoria 2
     | usuario   | correo                | direccion           | direccion_permanente            |
     | "Hakito"  | "hakito@hakalab.com"  | "calle prueba 123"  | "calle permanente prueba 123 "  |
 

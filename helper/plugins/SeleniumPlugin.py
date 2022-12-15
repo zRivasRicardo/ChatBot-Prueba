@@ -1,6 +1,4 @@
-import re
-import allure
-from allure_commons.types import AttachmentType
+from datetime import datetime
 from dotenv import load_dotenv
 from helper.plugins import PluginSpec
 import os
@@ -13,36 +11,26 @@ from helper.selenium_class.mouse_actions import MouseActions
 from helper.selenium_class.window_control import WindowControl
 from selenium import webdriver
 
-
-def camel_to_snake(text):
-    return re.sub(r'(?<!^)(?=[A-Z])', '_', text).lower()
-
-# def prepare_pages(context):
-#     current_directory = os.getcwd()
-#     pages_directory = [os.path.join(current_directory, 'helper/pages/mantenedor/')]
-#
-#     for loader, module_name, is_pkg in pkgutil.walk_packages(pages_directory):
-#         module = importlib.import_module('helper.pages.mantenedor.' + module_name)
-#         class_ = getattr(module, module_name)
-#         instance = class_(context.browser)
-#         setattr(context, camel_to_snake(module_name), instance)
-
-
-def execution_selenium(context):
+def execution_selenium(context, *tag):
     if os.getenv('EXECUTION_TYPE') == "localhost":
-        print("Tipo de ejecucion : ",os.getenv('EXECUTION_TYPE'))
         context.browser = config_driver_local(context)
-        context.browser.delete_all_cookies()
-        context.browser.implicitly_wait(20)
-        context.browser.set_window_size(1300, 900)
-        context.browser.maximize_window()
-        context.browser.set_page_load_timeout(time_to_wait=200)
     elif os.getenv('EXECUTION_TYPE') == "hub":
         context.browser = config_driver_selenium_hub(context)
+    elif os.getenv('EXECUTION_TYPE') == "selenoid":
+        if os.getenv('RELOADBROWSER') == "false":
+            name_video = "Video_selenoid_auto-" + datetime.now().strftime('%H-%M-%S')
+        else:
+            name_video = tag[0] + "-" + datetime.now().strftime('%H-%M-%S')
+        context.browser = config_driver_selenoid(context, name_video)
     elif os.getenv('EXECUTION_TYPE') == "saucelabs":
         context.browser = config_driver_saucelab(context)
+    else:
+        assert False, "Connection config is not correct, you should check file readme.md"
+    context.browser.delete_all_cookies()
+    context.browser.implicitly_wait(20)
+    context.browser.maximize_window()
+    context.browser.set_page_load_timeout(time_to_wait=200)
 
-    # global classes control selenium
     context.window_control = WindowControl(context.browser)
     context.elements = Elements(context.browser)
     context.js_script = JsScript(context.browser)
@@ -97,10 +85,7 @@ def config_driver_local(context,):
         print("Exception", exc)
         assert False, "Connection webdriver is not correct, you should check connection rute"
 
-
 def config_driver_selenium_hub(context):
-    global options
-    # TODO implementar ejecucion en pipeline para el resto de navegadores
     try:
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument("--headless")
@@ -113,6 +98,32 @@ def config_driver_selenium_hub(context):
         assert False, "Connection selenium hub config is not correct, you should check selenium Hub connection"
 
 
+def config_driver_selenoid(context, name_video):
+    try:
+        enable_vnc = os.getenv("ENABLE_VNC"),
+        enable_video = os.getenv("ENABLE_VIDEO")
+        enable_log = os.getenv("ENABLE_LOG")
+        capabilities = {
+                'browserName': os.getenv('BROWSER'),
+                'browserVersion': os.getenv('BROWSER_VERSION_SELENIUM'),
+                'selenoid:options': {
+                    "enableVNC":bool(enable_vnc),
+                    "enableVideo": bool(enable_video),
+                    "enableLog": bool(enable_log),
+                    "name": os.getenv("PROYECTO"),
+                    "videoName": name_video+".mp4",
+                    "sessionTimeout": "30m",
+
+                }
+        }
+        context.browser = webdriver.Remote(command_executor="http://"+os.getenv("SELENIUM_HUB_IP")+":4444/wd/hub", desired_capabilities=capabilities)
+        context.browser.maximize_window()
+        return context.browser
+    except Exception as exc:
+        print("Exception Selenoid config", exc)
+        assert False, "Connection selenoid config is not correct, you should check selenoid connection"
+
+
 def config_driver_saucelab(context):
     try:
         if os.getenv('USER_SAUCELAB') is not None and os.getenv('TOKEN_SAUCELAB') is not None and os.getenv('HOST_SAUCELAB') is not None:
@@ -123,8 +134,7 @@ def config_driver_saucelab(context):
                 'sauce:options': {
                 }
             }
-            context.browser = webdriver.Remote(
-                "https://"+os.getenv('USER_SAUCELAB')+":"+os.getenv('TOKEN_SAUCELAB')+"@"+os.getenv('HOST_SAUCELAB')+":443/wd/hub", capabilities)
+            context.browser = webdriver.Remote("https://"+os.getenv('USER_SAUCELAB')+":"+os.getenv('TOKEN_SAUCELAB')+"@"+os.getenv('HOST_SAUCELAB')+":443/wd/hub", capabilities)
         return context.browser
     except Exception as exc:
         print("Exception", exc)
@@ -152,13 +162,13 @@ class SeleniumPlugin:
 
     @PluginSpec.hookimpl
     def before_scenario(self, context, scenario):
-        print("Ejecutando escenario con tag : ", scenario.name)
-        if os.getenv('RELOADBROWSER') == "true" and os.getenv('EXECUTION_TYPE') == "localhost":
-            execution_selenium(context)
+        print("Ejecutando escenario : ", scenario.name)
+        if os.getenv('RELOADBROWSER') == "true" and (os.getenv('EXECUTION_TYPE') == "localhost" or os.getenv('EXECUTION_TYPE') == "selenoid" ):
+            execution_selenium(context, scenario.tags[0])
 
     @PluginSpec.hookimpl
     def after_scenario(self, context, scenario):
         print("Finalizando escenario : ", scenario.name, "con estado", scenario.status)
-        if os.getenv('RELOADBROWSER') == "true" and os.getenv('EXECUTION_TYPE') == "localhost":
+        if os.getenv('RELOADBROWSER') == "true" and (os.getenv('EXECUTION_TYPE') == "localhost" or os.getenv('EXECUTION_TYPE') == "selenoid"):
             context.browser.quit()
 
