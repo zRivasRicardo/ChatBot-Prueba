@@ -46,13 +46,13 @@ def config_driver_local(context,):
             rute_driver = str(pathlib.Path().absolute()) + "/helper/selenium_class/web_driver/" + os.getenv('BROWSER') + "/" + name_os + "/chromedriver"
             if name_os == 'Windows':
                 rute_driver += ".exe"
-            prefs = {"profile.default_content_setting_values.notifications": 2}
+            # prefs = {"profile.default_content_setting_values.notifications": 2}
             chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_experimental_option('--headless')
-            chrome_options.add_experimental_option('--no-sandbox')
-            chrome_options.add_experimental_option('--disable-dev-shm-usage')
-            chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
-            chrome_options.add_experimental_option("prefs", prefs)
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            # chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+            # chrome_options.add_experimental_option("prefs", prefs)
             print(rute_driver)
             context.browser = webdriver.Chrome(executable_path=rute_driver, chrome_options=chrome_options)
         elif os.getenv('BROWSER') == "firefox":
