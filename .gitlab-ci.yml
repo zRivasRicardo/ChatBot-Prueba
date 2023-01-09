@@ -7,11 +7,11 @@ test:
   services:
      - docker:dind
   before_script:
-    - apt -y update
-    - apt -y upgrade
-    - apt-get -y install default-jre
-    - apt-get -y install python3
-    - apt -y install wget
+    - apk -y update
+    - apk -y upgrade
+    - apk-get -y install default-jre
+    - apk-get -y install python3
+    - apk -y install wget
     - pip install --upgrade pip
     - pip install -r requirements.txt
     - docker version
