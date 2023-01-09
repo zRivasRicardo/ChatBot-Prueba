@@ -13,7 +13,7 @@ test:
     - apt -y update
     - apt -y upgrade
     - apt-get -y install default-jre
-    - apt-get install python3.8
+    - apt-get -y --only-upgrade install python3
     - apt -y install wget
     - pip install --upgrade pip
     - pip install -r requirements.txt
