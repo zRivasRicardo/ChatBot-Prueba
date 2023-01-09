@@ -12,12 +12,12 @@ Feature: historia hu-1
     And ingreso direccion permanente <direccion_permanente>
     And selecciono opcion enviar
     Then valido resultados de formulario <usuario><correo><direccion><direccion_permanente>
-  @HU-2
+  @HU-1
   Examples: ejecucion combinatoria 1
     | usuario   | correo                | direccion           | direccion_permanente            |
     | "Hakito"  | "hakito@hakalab.com"  | "calle prueba 123"  | "calle permanente prueba 123 "  |
 
-  @HU-3
+  @HU-2
   Examples: ejecucion combinatoria 2
     | usuario   | correo                | direccion           | direccion_permanente            |
     | "Hakito"  | "hakito@hakalab.com"  | "calle prueba 123"  | "calle permanente prueba 123 "  |
