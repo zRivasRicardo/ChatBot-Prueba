@@ -1,5 +1,5 @@
 variables:
-    EXECUTION_TYPE: "hub"
+    EXECUTION_TYPE: "localhost"
     SELENIUM_HUB_IP : "selenium__standalone-chrome"
     WIDTH_RESOLUTION: "1300"
     HEIGHT_RESOLUTION: "900"
