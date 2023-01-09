@@ -1,0 +1,41 @@
+version: '2'
+services:
+   chrome:
+      image: selenium/node-chrome-debug
+      volumes:
+         - /dev/shm:/dev/shm
+      depends_on:
+         - hub
+      environment:
+         - NODE_MAX_INSTANCES=7
+         - NODE_MAX_SESSION=7
+         - HUB_HOST=hub
+
+   firefox:
+      image: selenium/node-firefox-debug
+      volumes:
+         - /dev/shm:/dev/shm
+      depends_on:
+         - hub
+      environment:
+         - NODE_MAX_INSTANCES=7
+         - NODE_MAX_SESSION=7
+         - HUB_HOST=hub
+
+   opera:
+      image: selenium/node-opera-debug
+      volumes:
+         - /dev/shm:/dev/shm
+      depends_on:
+         - hub
+      environment:
+         - NODE_MAX_INSTANCES=7
+         - NODE_MAX_SESSION=7
+         - HUB_HOST=hub
+
+   hub:
+      image: selenium/hub:latest
+      ports:
+         - "4444:4444"
+      environment:
+         - GRID_MAX_SESSION=21

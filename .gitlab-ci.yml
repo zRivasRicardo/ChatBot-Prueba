@@ -1,0 +1,38 @@
+stages:
+  - test
+
+test:
+  stage: test
+  image: m4nu56/docker-compose-python:latest
+
+  services:
+     - docker:dind
+
+  before_script:
+    - apt -y update
+    - apt -y upgrade
+    - apt-get -y install default-jre
+    - apt -y install wget
+    - apt-get -y update
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    - docker version
+    - docker-compose version
+
+
+  script:
+    - echo "llegamos"
+    - docker-compose up -d
+    - cd helper/vendor
+    - wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
+    - unzip allure-commandline-2.13.6.zip
+    - rm allure-commandline-2.13.6.zip
+    - cd ../../
+    - behave -f allure_behave.formatter:AllureFormatter -o reporte features/hakatools.feature
+    - mv ./report ./report_chrome
+    - docker-compose down
+  artifacts:
+    expire_in: 48 hrs
+    paths:
+      - report_chrome/
+
