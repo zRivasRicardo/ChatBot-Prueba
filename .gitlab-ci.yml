@@ -5,7 +5,8 @@ test:
   stage: test
   #image: m4nu56/docker-compose-python:latest
   #image: python:3.9
-  image: kevinjqiu/python-docker-compose
+  #image: kevinjqiu/python-docker-compose
+  image: eotdjamel/python3-docker-compose2
 
   services:
      - docker:dind
