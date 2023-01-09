@@ -3,7 +3,8 @@ stages:
 
 test:
   stage: test
-  image: m4nu56/docker-compose-python:latest
+  #image: m4nu56/docker-compose-python:latest apt-get no funca
+  image: linuxserver/docker-compose
 
   services:
      - docker:dind
