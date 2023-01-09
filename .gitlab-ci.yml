@@ -3,11 +3,12 @@ stages:
 
 test:
   stage: test
-  image: vikassoni11/docker-compose-python:latest
+  image: m4nu56/docker-compose-python:lastest
   services:
      - docker:dind
   before_script:
-    - apk update and apk add
+    - apt -y update
+    - apt -y upgrade
     - apt-get -y install default-jre
     - apt-get -y install python3
     - apt -y install wget
