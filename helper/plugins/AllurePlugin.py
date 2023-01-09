@@ -15,15 +15,15 @@ def attachment_screenshot_step_in_allure(context):
 
 def update_personal_report_allure(context):
     resolution = context.browser.get_window_size()
-    file = open(str(pathlib.Path().absolute()) + "\\reporte\\environment.properties", "w+")
+    file = open(str(pathlib.Path().absolute()) + "\\report\\widgets\\environment.properties", "w+")
     if os.getenv('EXECUTION_TYPE') == 'hub':
-       file = open(str(pathlib.Path().absolute()) + "/reporte/environment.properties", "w+")
+        file = open(str(pathlib.Path().absolute()) + "/report/widgets/environment.properties", "w+")
     file.write("Browser :" + context.browser.name.capitalize() + os.linesep)    
     file.write("Browser.Version : Latest" + os.linesep)
     file.write("Resolución" + os.linesep)
     file.write("Ancho :" + str(resolution['width']) + os.linesep)
     file.write("Alto :" + str(resolution['height']) + os.linesep)
-    file.write("Ambiente : Nakisa UAT" + os.linesep)
+    file.write("Ambiente : QA Hakalab" + os.linesep)
     file.close()
 
 def execute_allure_combine():
@@ -55,7 +55,7 @@ def execute_allure_combine():
             os.path.join(os.getcwd(), 'helper', 'vendor', 'report-assets', 'executors.json'),
             os.path.join(os.getcwd(), 'report', 'widgets', 'executors.json'))
 
-        os.system(f"python ./helper/combine.py .{os.sep}report")
+        os.system(f"python3 ./helper/combine.py .{os.sep}report")
         if os.getenv("CLEAN_EXTRAS_REPORT_ALLURE") == "true":
             os.remove(os.path.join(os.getcwd(), 'report', 'index.html'))
             os.remove(os.path.join(os.getcwd(), 'report', 'app.js'))
@@ -78,4 +78,5 @@ class AllurePlugin:
     @PluginSpec.hookimpl
     def after_all(self, context):
         if os.getenv("EXECUTION_PARALLEL") == "false":
+            update_personal_report_allure(context)
             execute_allure_combine()

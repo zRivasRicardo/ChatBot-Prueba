@@ -1,0 +1,47 @@
+image: python:3.9
+
+.set_environment: &setenv |
+    BROWSER: $BROWSER
+    EXECUTION_TYPE: $EXECUTION_TYPE
+    SELENIUM_HUB_IP : $SELENIUM_HUB_IP
+    WIDTH_RESOLUTION: $WIDTH_RESOLUTION
+    HEIGHT_RESOLUTION: $HEIGHT_RESOLUTION
+    RELOADBROWSER: $RELOADBROWSER
+    EXECUTE_ALLURE: $EXECUTE_ALLURE
+    SAVE_REPORT_ALLURE: $SAVE_REPORT_ALLURE
+    CLEAN_EXTRAS_REPORT_ALLURE: $CLEAN_EXTRAS_REPORT_ALLURE
+    EXECUTION_PARALLEL: $EXECUTION_PARALLEL
+    EXECUTE_RERUN: $EXECUTE_RERUN
+    FAILED_SCENARIO_ARRAY: $FAILED_SCENARIO_ARRAY
+
+definitions:
+  services:
+    chrome:
+      image: seleniarm/standalone-chromium:latest
+      port: 4444:4444
+
+clone:
+  depth: full
+
+pipelines:
+  default:
+    - step:
+        name: Run Steward (Selenium) tests with Chrome
+        services:
+          - chrome
+        script:
+          - apt -y update
+          - apt -y upgrade
+          - apt-get -y install default-jre
+          - apt -y install wget
+          - apt-get -y update
+          - pip install --upgrade pip
+          - pip install -r requirements.txt
+          - cd helper/vendor
+          - wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
+          - unzip allure-commandline-2.13.6.zip
+          - rm allure-commandline-2.13.6.zip
+          - cd ../../
+          - behave -f allure_behave.formatter:AllureFormatter -o reporte -t "@formulario_basico"
+        artifacts:
+          - report/hakalab_report.html
