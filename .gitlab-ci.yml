@@ -10,8 +10,8 @@ test:
      - docker:dind
 
   before_script:
-    - apt -y update
-    - apt -y upgrade
+    #- apt -y update
+    #- apt -y upgrade
     - apt-get -y install default-jre
     - apt -y install wget
     - apt-get -y update
