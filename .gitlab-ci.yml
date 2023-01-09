@@ -3,7 +3,7 @@ stages:
 
 test:
   stage: test
-  image: m4nu56/docker-compose-python:lastest
+  image: m4nu56/docker-compose-python:latest
   services:
      - docker:dind
   before_script:
