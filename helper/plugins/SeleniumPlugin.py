@@ -48,7 +48,9 @@ def config_driver_local(context,):
                 rute_driver += ".exe"
             prefs = {"profile.default_content_setting_values.notifications": 2}
             chrome_options = webdriver.ChromeOptions()
-            # chrome_options.add_argument("--headless")
+            chrome_options.add_experimental_option('--headless')
+            chrome_options.add_experimental_option('--no-sandbox')
+            chrome_options.add_experimental_option('--disable-dev-shm-usage')
             chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
             chrome_options.add_experimental_option("prefs", prefs)
             print(rute_driver)
