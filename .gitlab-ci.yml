@@ -10,12 +10,11 @@ test:
      - docker:dind
 
   before_script:
-    #- apt -y update
-    #- apt -y upgrade
+    - apt -y update
+    - apt -y upgrade
     - apt-get -y install default-jre
-    - apt -y install wget
-    - apt-get -y update
     - apt-get install python3.8
+    - apt -y install wget
     - pip install --upgrade pip
     - pip install -r requirements.txt
     - docker version
