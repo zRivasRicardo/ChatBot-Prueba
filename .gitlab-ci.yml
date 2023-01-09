@@ -3,10 +3,7 @@ stages:
 
 test:
   stage: test
-  #image: m4nu56/docker-compose-python:latest
-  #image: python:3.9
-  #image: kevinjqiu/python-docker-compose
-  image: vikassoni11/docker-compose-python
+  image: m4nu56/docker-compose-python:latest
 
   services:
      - docker:dind
@@ -17,6 +14,7 @@ test:
     - apt-get -y install default-jre
     - apt -y install wget
     - apt-get -y update
+    - apt-get install python3.8
     - pip install --upgrade pip
     - pip install -r requirements.txt
     - docker version
