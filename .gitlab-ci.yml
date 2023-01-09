@@ -6,7 +6,7 @@ test:
   #image: m4nu56/docker-compose-python:latest
   #image: python:3.9
   #image: kevinjqiu/python-docker-compose
-  image: eotdjamel/python3-docker-compose2
+  image: fergyfresh/docker-compose-python3
 
   services:
      - docker:dind
