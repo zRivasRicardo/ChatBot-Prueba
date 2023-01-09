@@ -1,36 +1,58 @@
-stages:
-  - test
+variables:
+    EXECUTION_TYPE: "hub"
+    SELENIUM_HUB_IP : "selenium__standalone-chrome"
+    WIDTH_RESOLUTION: "1300"
+    HEIGHT_RESOLUTION: "900"
+    RELOADBROWSER: "false"
+    USER_SAUCELAB: ""
+    TOKEN_SAUCELAB: ""
+    HOST_SAUCELAB: ""
+    BROWSER_VERSION_SELENIUM: ""
+    PLATFORM_NAME_SELENIUM: ""
+    EXECUTE_ALLURE: "true"
+    SAVE_REPORT_ALLURE: "true"
+    CLEAN_EXTRAS_REPORT_ALLURE: "true"
+    EXECUTION_PARALLEL: "true"
+    EXECUTE_RERUN: "false"
+    COUNT: "0"
+    REPEAT: "2"
+    FAILED_SCENARIO_ARRAY: "[]"
 
-test:
+test.chrome:
   stage: test
-  image: m4nu56/docker-compose-python:latest
-  services:
-     - docker:dind
+  image: python:latest
+  variables:
+    BROWSER: "chrome"
   before_script:
-    - apk -y update
-    - apk -y upgrade
-    - apk-get -y install default-jre
-    - apk-get -y install python3
-    - apk -y install wget
+    - cat /etc/os-release
+    - apt -y update
+    - apt -y upgrade
+    - apt-get -y install default-jre
+    - apt -y install wget
+    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+    - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+    - apt-get -y update
+    - apt-get install -y google-chrome-stable
+    - wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
+    - unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
     - pip install --upgrade pip
     - pip install -r requirements.txt
-    - docker version
-    - docker-compose version
-
-
   script:
-    - echo "llegamos"
-    - docker-compose up -d
     - cd helper/vendor
     - wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
     - unzip allure-commandline-2.13.6.zip
     - rm allure-commandline-2.13.6.zip
     - cd ../../
-    - behave -f allure_behave.formatter:AllureFormatter -o reporte features/test_selenium.feature
+    - python executions.py -e parallel
     - mv ./report ./report_chrome
-    - docker-compose down
+#  retry:
+#    max: 2
+#    when:
+#      - runner_system_failure
+#      - stuck_or_timeout_failure
   artifacts:
-    expire_in: 48 hrs
+    expire_in: 24 hrs
     paths:
       - report_chrome/
-
+  only:
+    - main
