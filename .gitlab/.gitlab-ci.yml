@@ -1,7 +1,10 @@
+image: python:latest
+
 variables:
-    BROWSER: "chrome"
+    URL : "https://www.hakalab.com/hakatools/"
+    TIME_IMPLICITY : "10"
     EXECUTION_TYPE: "hub"
-    SELENIUM_HUB_IP : "selenium__standalone-chrome"
+    EXECUTION_PARALLEL: "true"
     WIDTH_RESOLUTION: "1300"
     HEIGHT_RESOLUTION: "900"
     RELOADBROWSER: "false"
@@ -11,9 +14,8 @@ variables:
     BROWSER_VERSION_SELENIUM: ""
     PLATFORM_NAME_SELENIUM: ""
     EXECUTE_ALLURE: "true"
-    SAVE_REPORT_ALLURE: "true"
+    SAVE_REPORT_ALLURE: "false"
     CLEAN_EXTRAS_REPORT_ALLURE: "true"
-    EXECUTION_PARALLEL: "true"
     EXECUTE_RERUN: "false"
     COUNT: "0"
     REPEAT: "2"
@@ -24,7 +26,9 @@ stages:
 
 test.chrome:
   stage: test
-  image: python:3.9
+  variables:
+    BROWSER: "chrome"
+    SELENIUM_HUB_IP : "selenium__standalone-chrome"
   services:
     - name: selenium/standalone-chrome:latest
   before_script:
@@ -32,7 +36,6 @@ test.chrome:
     - apt -y upgrade
     - apt-get -y install default-jre
     - apt -y install wget
-    - apt-get -y update
     - pip install --upgrade pip
     - pip install -r requirements.txt
   script:
@@ -41,13 +44,87 @@ test.chrome:
     - unzip allure-commandline-2.13.6.zip
     - rm allure-commandline-2.13.6.zip
     - cd ../../
-    - behave -f allure_behave.formatter:AllureFormatter -o reporte -t "@formulario_basico"
+    - python executions.py -e parallel
     - mv ./report ./report_chrome
+#  retry:
+#    max: 2
+#    when:
+#      - runner_system_failure
+#      - stuck_or_timeout_failure
   artifacts:
+    expire_in: 1 hrs
     when: always
-    expire_in: 48 hrs
     paths:
       - report_chrome/
   only:
     - main
 
+test.firefox:
+  stage: test
+  variables:
+    BROWSER: "firefox"
+    SELENIUM_HUB_IP : "selenium__standalone-firefox"
+  services:
+    - name: selenium/standalone-firefox:latest
+  before_script:
+    - apt -y update
+    - apt -y upgrade
+    - apt-get -y install default-jre
+    - apt -y install wget
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - cd helper/vendor
+    - wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
+    - unzip allure-commandline-2.13.6.zip
+    - rm allure-commandline-2.13.6.zip
+    - cd ../../
+    - python executions.py -e parallel
+    - mv ./report ./report_firefox
+#  retry:
+#    max: 2
+#    when:
+#      - runner_system_failure
+#      - stuck_or_timeout_failure
+  artifacts:
+    expire_in: 1 hrs
+    when: always
+    paths:
+      - report_firefox/
+  only:
+    - main
+
+test.edge:
+  stage: test
+  variables:
+    BROWSER: "edge"
+    SELENIUM_HUB_IP : "selenium__standalone-edge"
+  services:
+    - name: selenium/standalone-edge:latest
+  before_script:
+    - apt -y update
+    - apt -y upgrade
+    - apt-get -y install default-jre
+    - apt -y install wget
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - cd helper/vendor
+    - wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
+    - unzip allure-commandline-2.13.6.zip
+    - rm allure-commandline-2.13.6.zip
+    - cd ../../
+    - python executions.py -e parallel
+    - mv ./report ./report_edge
+#  retry:
+#    max: 2
+#    when:
+#      - runner_system_failure
+#      - stuck_or_timeout_failure
+  artifacts:
+    expire_in: 1 hrs
+    when: always
+    paths:
+      - report_edge/
+  only:
+    - main
