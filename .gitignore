@@ -77,9 +77,8 @@ target/
 # Environments
 #.env
 .venv
-venvv
-env/
 venv
+env/
 venv/
 ENV/
 env.bak/
