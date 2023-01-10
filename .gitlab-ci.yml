@@ -56,8 +56,8 @@ test.chrome:
     when: always
     paths:
       - report_chrome/
-#  only:
-#    - main
+  only:
+    - main
 
 test.firefox:
   stage: test
@@ -91,43 +91,8 @@ test.firefox:
     when: always
     paths:
       - report_firefox/
-#  only:
-#    - main
-
-test.opera:
-  stage: test
-  variables:
-    BROWSER: "opera"
-    SELENIUM_HUB_IP : "selenium__standalone-opera"
-  services:
-    - name: selenium/standalone-opera:latest
-  before_script:
-    - apt -y update
-    - apt -y upgrade
-    - apt-get -y install default-jre
-    - apt -y install wget
-    - pip install --upgrade pip
-    - pip install -r requirements.txt
-  script:
-    - cd helper/vendor
-    - wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
-    - unzip allure-commandline-2.13.6.zip
-    - rm allure-commandline-2.13.6.zip
-    - cd ../../
-    - python executions.py -e parallel
-    - mv ./report ./report_opera
-#  retry:
-#    max: 2
-#    when:
-#      - runner_system_failure
-#      - stuck_or_timeout_failure
-  artifacts:
-    expire_in: 1 hrs
-    when: always
-    paths:
-      - report_opera/
-#  only:
-#    - main
+  only:
+    - main
 
 test.edge:
   stage: test
@@ -161,5 +126,5 @@ test.edge:
     when: always
     paths:
       - report_edge/
-#  only:
-#    - main
+  only:
+    - main

@@ -99,8 +99,6 @@ def config_driver_selenium_hub(context):
             options = webdriver.FirefoxOptions()
         elif os.getenv('BROWSER') == "edge":
             options = webdriver.EdgeOptions()
-        elif os.getenv('BROWSER') == "opera":
-            options = webdriver.ChromeOptions()
         else:
             assert False, "No esta configurado el navegador "+os.getenv('BROWSER')+" para ejecutar en Hub"
         options.add_argument('--headless')
