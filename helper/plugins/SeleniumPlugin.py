@@ -59,8 +59,12 @@ def config_driver_local(context,):
             rute_driver = str(pathlib.Path().absolute()) + "/helper/selenium_class/web_driver/" + os.getenv('BROWSER') + "/" + name_os + "/geckodriver"
             if name_os == 'Windows':
                 rute_driver += ".exe"
-            rute_driver = rute_driver.replace("\\", "/")
-            context.browser = webdriver.Firefox(executable_path=rute_driver)
+            # rute_driver = rute_driver.replace("\\", "/")
+            options = Options()
+            options.add_argument('--headless')
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+            context.browser = webdriver.Firefox(executable_path=rute_driver, options=options)
         elif os.getenv('BROWSER') == "opera":
             rute_driver = str(pathlib.Path().absolute()) + "/helper/selenium_class/web_driver/" + os.getenv('BROWSER') + "/" + name_os + "/operadriver"
             if name_os == "Windows":
@@ -89,10 +93,18 @@ def config_driver_local(context,):
 
 def config_driver_selenium_hub(context):
     try:
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--window-size=" + os.getenv('WIDTH_RESOLUTION') + "," + os.getenv('HEIGHT_RESOLUTION'))
-        options = chrome_options
+        if os.getenv('BROWSER') == "chrome":
+            options = webdriver.ChromeOptions()
+        elif os.getenv('BROWSER') == "firefox":
+            options = webdriver.FirefoxOptions()
+        elif os.getenv('BROWSER') == "edge":
+            options = webdriver.EdgeOptions()
+        else:
+            assert False, "No esta configurado el navegador "+os.getenv('BROWSER')+" para ejecutar en Hub"
+        options.add_argument('--headless')
+        options.add_argument("--window-size=" + os.getenv('WIDTH_RESOLUTION') + "," + os.getenv('HEIGHT_RESOLUTION'))
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
         context.browser = webdriver.Remote(command_executor='http://' + os.getenv("SELENIUM_HUB_IP") + ':4444/wd/hub', desired_capabilities=options.to_capabilities())
         return context.browser
     except Exception as exc:
