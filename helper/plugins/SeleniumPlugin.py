@@ -66,7 +66,7 @@ def config_driver_local(context,):
             options.add_argument('--headless')
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
-            context.browser = webdriver.Firefox(executable_path=rute_driver, firefox_options=options)
+            context.browser = webdriver.Firefox(executable_path=rute_driver, options=options)
         elif os.getenv('BROWSER') == "opera":
             rute_driver = str(pathlib.Path().absolute()) + "/helper/selenium_class/web_driver/" + os.getenv('BROWSER') + "/" + name_os + "/operadriver"
             if name_os == "Windows":
