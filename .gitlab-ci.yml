@@ -70,9 +70,10 @@ test.firefox:
   variables:
     BROWSER: "firefox"
   script:
+    - apt-get -y install software-properties-common
+    - sudo apt-get update
     - apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A6DCF7707EBC211F
     - apt-add-repository "deb http://ppa.launchpad.net/ubuntu-mozilla-security/ppa/ubuntu bionic main"
-    - apt-get -y update
     - apt-get install -y firefox-4.0
     - wget -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/tag/v0.32.0/geckodriver-v0.32.0-linux64.tar.gz
     - unzip /tmp/geckodriver.tar.gz geckodriver -d /usr/local/bin/
