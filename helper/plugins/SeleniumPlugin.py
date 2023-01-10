@@ -1,7 +1,5 @@
 from datetime import datetime
 from dotenv import load_dotenv
-from selenium.webdriver.firefox.options import Options
-
 from helper.plugins import PluginSpec
 import os
 from platform import system
@@ -96,22 +94,17 @@ def config_driver_local(context,):
 def config_driver_selenium_hub(context):
     try:
         if os.getenv('BROWSER') == "chrome":
-            chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument('--headless')
-            chrome_options.add_argument("--window-size=" + os.getenv('WIDTH_RESOLUTION') + "," + os.getenv('HEIGHT_RESOLUTION'))
-            chrome_options.add_argument('--no-sandbox')
-            chrome_options.add_argument('--disable-dev-shm-usage')
-            options = chrome_options
-            context.browser = webdriver.Remote(command_executor='http://' + os.getenv("SELENIUM_HUB_IP") + ':4444/wd/hub', desired_capabilities=options.to_capabilities())
-            return context.browser
+            options = webdriver.ChromeOptions()
         elif os.getenv('BROWSER') == "firefox":
-            chrome_options = webdriver.FirefoxOptions()
-            chrome_options.add_argument('--headless')
-            chrome_options.add_argument("--window-size=" + os.getenv('WIDTH_RESOLUTION') + "," + os.getenv('HEIGHT_RESOLUTION'))
-            chrome_options.add_argument('--no-sandbox')
-            chrome_options.add_argument('--disable-dev-shm-usage')
-            options = chrome_options
-            context.browser = webdriver.Remote(command_executor='http://' + os.getenv("SELENIUM_HUB_IP") + ':4444/wd/hub', desired_capabilities=options.to_capabilities())
+            options = webdriver.FirefoxOptions()
+        else:
+            assert False, "No esta configurado el navegador "+os.getenv('BROWSER')+" para ejecutar en Hub"
+        options.add_argument('--headless')
+        options.add_argument("--window-size=" + os.getenv('WIDTH_RESOLUTION') + "," + os.getenv('HEIGHT_RESOLUTION'))
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        context.browser = webdriver.Remote(command_executor='http://' + os.getenv("SELENIUM_HUB_IP") + ':4444/wd/hub',desired_capabilities=options.to_capabilities())
+        return context.browser
     except Exception as exc:
         print("Exception Selenium Hub config", exc)
         assert False, "Connection selenium hub config is not correct, you should check selenium Hub connection"
