@@ -100,14 +100,14 @@ def config_driver_selenium_hub(context):
         elif os.getenv('BROWSER') == "edge":
             options = webdriver.EdgeOptions()
         elif os.getenv('BROWSER') == "opera":
-            options = webdriver.Opera()
+            options = webdriver.ChromeOptions()
         else:
             assert False, "No esta configurado el navegador "+os.getenv('BROWSER')+" para ejecutar en Hub"
         options.add_argument('--headless')
         options.add_argument("--window-size=" + os.getenv('WIDTH_RESOLUTION') + "," + os.getenv('HEIGHT_RESOLUTION'))
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
-        context.browser = webdriver.Remote(command_executor='http://' + os.getenv("SELENIUM_HUB_IP") + ':4444/wd/hub',desired_capabilities=options.to_capabilities())
+        context.browser = webdriver.Remote(command_executor='http://' + os.getenv("SELENIUM_HUB_IP") + ':4444/wd/hub', desired_capabilities=options.to_capabilities())
         return context.browser
     except Exception as exc:
         print("Exception Selenium Hub config", exc)
