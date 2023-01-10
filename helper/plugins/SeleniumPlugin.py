@@ -1,5 +1,7 @@
 from datetime import datetime
 from dotenv import load_dotenv
+from selenium.webdriver.firefox.options import Options
+
 from helper.plugins import PluginSpec
 import os
 from platform import system
@@ -59,8 +61,12 @@ def config_driver_local(context,):
             rute_driver = str(pathlib.Path().absolute()) + "/helper/selenium_class/web_driver/" + os.getenv('BROWSER') + "/" + name_os + "/geckodriver"
             if name_os == 'Windows':
                 rute_driver += ".exe"
-            rute_driver = rute_driver.replace("\\", "/")
-            context.browser = webdriver.Firefox(executable_path=rute_driver)
+            # rute_driver = rute_driver.replace("\\", "/")
+            options = Options()
+            options.add_argument('--headless')
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+            context.browser = webdriver.Firefox(executable_path=rute_driver, firefox_options=options)
         elif os.getenv('BROWSER') == "opera":
             rute_driver = str(pathlib.Path().absolute()) + "/helper/selenium_class/web_driver/" + os.getenv('BROWSER') + "/" + name_os + "/operadriver"
             if name_os == "Windows":

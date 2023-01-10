@@ -1,3 +1,5 @@
+image: python:latest
+
 variables:
     URL : "https://www.hakalab.com/hakatools/"
     TIME_IMPLICITY : "10"
@@ -20,41 +22,71 @@ variables:
     REPEAT: "2"
     FAILED_SCENARIO_ARRAY: "[]"
 
-test.chrome:
+stages:
+  - test
+
+before_script:
+  - cat /etc/os-release
+  - apt -y update
+  - apt -y upgrade
+  - apt-get -y install default-jre
+  - apt -y install wget
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+  - cd helper/vendor
+  - wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
+  - unzip allure-commandline-2.13.6.zip
+  - rm allure-commandline-2.13.6.zip
+  - cd ../../
+
+#test.chrome:
+#  stage: test
+#  variables:
+#    BROWSER: "chrome"
+#  script:
+#    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+#    - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+#    - apt-get -y update
+#    - apt-get install -y google-chrome-stable
+#    - wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/108.0.5359.71/chromedriver_linux64.zip
+#    - unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+#    - python executions.py -e parallel
+#    - mv ./report ./report_chrome
+##  retry:
+##    max: 2
+##    when:
+##      - runner_system_failure
+##      - stuck_or_timeout_failure
+#  artifacts:
+#    expire_in: 1 hrs
+#    when: always
+#    paths:
+#      - report_chrome/
+#  only:
+#    - main
+
+test.firefox:
   stage: test
-  image: python:latest
   variables:
-    BROWSER: "chrome"
-  before_script:
-    - cat /etc/os-release
-    - apt -y update
-    - apt -y upgrade
-    - apt-get -y install default-jre
-    - apt -y install wget
-    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-    - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-    - apt-get -y update
-    - apt-get install -y google-chrome-stable
-    - wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/108.0.5359.71/chromedriver_linux64.zip
-    - unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
-    - pip install --upgrade pip
-    - pip install -r requirements.txt
+    BROWSER: "firefox"
   script:
-    - cd helper/vendor
-    - wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.6/allure-commandline-2.13.6.zip
-    - unzip allure-commandline-2.13.6.zip
-    - rm allure-commandline-2.13.6.zip
-    - cd ../../
+    - apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A6DCF7707EBC211F
+    - apt-add-repository "deb http://ppa.launchpad.net/ubuntu-mozilla-security/ppa/ubuntu bionic main"
+    - apt-get -y update
+    - apt-get install -y firefox-4.0
+    - wget -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/tag/v0.32.0/geckodriver-v0.32.0-linux64.tar.gz
+    - unzip /tmp/geckodriver.tar.gz geckodriver -d /usr/local/bin/
     - python executions.py -e parallel
-    - mv ./report ./report_chrome
+    - mv ./report ./report_firefox
 #  retry:
 #    max: 2
 #    when:
 #      - runner_system_failure
 #      - stuck_or_timeout_failure
   artifacts:
-    expire_in: 24 hrs
+    expire_in: 1 hrs
+    when: always
     paths:
-      - report_chrome/
+      - report_firefox/
   only:
     - main
