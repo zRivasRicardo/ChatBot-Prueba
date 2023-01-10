@@ -88,5 +88,5 @@ test.firefox:
     when: always
     paths:
       - report_firefox/
-  only:
-    - main
+#  only:
+#    - main
