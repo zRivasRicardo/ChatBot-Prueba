@@ -30,7 +30,8 @@ test.chrome:
     BROWSER: "chrome"
     SELENIUM_HUB_IP : "selenium__standalone-chrome"
 #  services:  seleniarm/standalone-chromium:latest
-  services: selenium/standalone-chrome:latest
+  services:
+    - name: selenium/standalone-chrome:latest
   before_script:
 #    - cat /etc/os-release
     - apt -y update
