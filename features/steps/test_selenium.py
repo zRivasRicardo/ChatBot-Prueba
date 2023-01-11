@@ -1,10 +1,13 @@
 import os
 import time
 
+from allure_commons.types import AttachmentType
 from assertpy import soft_assertions
 from behave import given, when, then
 #from assertpy import soft_assertions
+
 from helper.pages.page_hakatoolsl import PageModel
+from helper.plugins.AllurePlugin import attach_text
 
 
 @given(u'ingreso a hakatools')
@@ -41,6 +44,7 @@ def seleccionar_direccion_permanente(context,direccion_permanente):
 @when(u'selecciono opcion enviar')
 def seleccionar_enviar(context):
     context.elements._implicity_wait(time=int(os.getenv("TIME_IMPLICITY")), element_by=PageModel.btn_enviar).click()
+    attach_text("Producto: taza de cafe", "Data Test")
 
 
 @then(u'valido resultados de formulario "{nombre}""{correo}""{direccion}""{direccion_permanente}"')
