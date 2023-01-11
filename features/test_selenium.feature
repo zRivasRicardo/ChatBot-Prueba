@@ -23,7 +23,7 @@ Feature: historia hu-1
     | "Hakito"  | "hakito@hakalab.com"  | "calle prueba 123"  | "calle permanente prueba 123 "  |
 
   @HU-3
-  Examples: ejecucion combinatoria 2
+  Examples: ejecucion combinatoria 3
     | usuario   | correo                | direccion           | direccion_permanente            |
     | "Hakito"  | "hakito@hakalab.com"  | "calle prueba 123"  | "calle permanente prueba 123 "  |
 

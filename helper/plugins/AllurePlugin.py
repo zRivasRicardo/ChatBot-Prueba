@@ -6,7 +6,7 @@ from platform import system
 import pathlib
 from helper.plugins import PluginSpec
 
-def attach_text(text: , variable_name: str):
+def attach_text(text: str, variable_name: str):
     allure.attach(text,name=variable_name,attachment_type=AttachmentType.TEXT)
 def attachment_browser_scenario_in_allure(context):
     allure.attach(context.browser.name, name="Browser", attachment_type=AttachmentType.TEXT)
