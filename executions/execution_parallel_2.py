@@ -22,7 +22,7 @@ if __name__ == '__main__':
             folder = str(pathlib.Path().absolute()) + '/reporte'
         shutil.rmtree(folder, ignore_errors=True)
     # Add tags to list_ tag for execute
-    list_tag = ["@HU-2"]
+    list_tag = ["@HU-12"]
     os.environ['CANTIDAD'] = 'Multiple'
     list_tag_execution = []
     for i in list_tag:
