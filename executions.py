@@ -14,14 +14,14 @@ def execution_regression():
     os.system('python -m behave -f allure_behave.formatter:AllureFormatter -o reporte ./features/')
     
 def execution_tag(tag_name):
-    os.system('python -m behave -f allure_behave.formatter:AllureFormatter -o reporte --tags='+tag_name)
+    os.system('python3 -m behave -f allure_behave.formatter:AllureFormatter -o reporte --tags='+tag_name)
 
 def execution_parallel():
     # Iterable con las rutas de los scripts
     scripts_paths = listdir("./executions/")
     print("La lista", scripts_paths)
     # Creamos cada proceso
-    list_processes = [subprocess.Popen(["python", "./executions/"+script]) for script in scripts_paths]
+    list_processes = [subprocess.Popen(["python3", "./executions/"+script]) for script in scripts_paths]
 
     # Esperamos a que todos los subprocesos terminen
     for the_process in list_processes:

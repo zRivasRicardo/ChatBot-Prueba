@@ -8,7 +8,7 @@ from platform import system
 
 
 def execution_cycle(tag_name):
-    os.system('python -m behave -f allure_behave.formatter:AllureFormatter -o reporte --tags=' + tag_name)
+    os.system('python3 -m behave -f allure_behave.formatter:AllureFormatter -o reporte --tags=' + tag_name)
 
 
 if __name__ == '__main__':
