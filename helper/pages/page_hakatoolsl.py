@@ -12,3 +12,4 @@ class PageModel:
     txt_direccion_permanente = (By.ID, "permanentAddress")
     btn_enviar = (By.ID, "submitBasicForm")
     txt_result_form = (By.ID, "resultBasicForm")
+

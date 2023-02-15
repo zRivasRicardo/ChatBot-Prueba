@@ -56,4 +56,5 @@ def validar_formulario(context,nombre,correo,direccion,direccion_permanente):
         assert direccion in resultado, "el campo direccion del formulario no coincide"
         assert direccion_permanente in resultado, "el campo direccion permanente del formulario no coincide"
 
+    assert nombre in resultado, "el campo nombre  del formulario no coincide"
 

@@ -1,4 +1,4 @@
-@Regresion
+@codigo_HU
 Feature: historia hu-1
   Validar funcionalidad de formularios en hakatools
 
@@ -12,6 +12,7 @@ Feature: historia hu-1
     And ingreso direccion permanente <direccion_permanente>
     And selecciono opcion enviar
     Then valido resultados de formulario <usuario><correo><direccion><direccion_permanente>
+
   @HU-1
   Examples: ejecucion combinatoria 1
     | usuario   | correo                | direccion           | direccion_permanente            |
@@ -26,4 +27,6 @@ Feature: historia hu-1
   Examples: ejecucion combinatoria 3
     | usuario   | correo                | direccion           | direccion_permanente            |
     | "Hakito"  | "hakito@hakalab.com"  | "calle prueba 123"  | "calle permanente prueba 123 "  |
+
+
 
