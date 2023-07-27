@@ -13,3 +13,8 @@ class Services:
 
     def implement_method(self):
        """implement method"""
+
+    def login_hakatools(self, usuario, passed):
+        time.sleep(10)
+
+

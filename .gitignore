@@ -9,7 +9,7 @@ helper/vendor/allure-2.13.6/
 allure-report/
 site/
 
-.env
+
 .scannerwork
 debug.log
 

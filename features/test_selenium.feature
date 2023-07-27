@@ -2,9 +2,11 @@
 Feature: historia hu-1
   Validar funcionalidad de formularios en hakatools
 
+  Background:
+    Given ingreso a hakatools
+
   @hakatools @formulario_basico
   Scenario Outline: Valido formulario basico en hakatools
-    Given ingreso a hakatools
     When selecciono la lista "Formularios"
     And ingreso nombre de usuario <usuario>
     And ingreso correo <correo>
