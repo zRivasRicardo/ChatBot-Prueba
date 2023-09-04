@@ -79,6 +79,7 @@ class AllurePlugin:
     @PluginSpec.hookimpl
     def after_all(self, context):
         if os.getenv("EXECUTION_PARALLEL") == "false":
-            update_personal_report_allure(context)
+            #TODO revisar metodo update_personal_report_allure(context)
+            #update_personal_report_allure(context)
             execute_allure_combine()
 

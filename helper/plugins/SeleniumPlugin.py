@@ -107,16 +107,13 @@ def config_driver_selenium_hub(context):
 
 def config_driver_selenoid(context, name_video):
     try:
-        enable_vnc = os.getenv("ENABLE_VNC"),
-        enable_video = os.getenv("ENABLE_VIDEO")
-        enable_log = os.getenv("ENABLE_LOG")
         capabilities = {
                 'browserName': os.getenv('BROWSER'),
                 'browserVersion': os.getenv('BROWSER_VERSION_SELENIUM'),
                 'selenoid:options': {
-                    "enableVNC":bool(enable_vnc),
-                    "enableVideo": bool(enable_video),
-                    "enableLog": bool(enable_log),
+                    "enableVNC": False,
+                    "enableVideo": False,
+                    "enableLog": False,
                     "name": os.getenv("PROYECTO"),
                     "videoName": name_video+".mp4",
                     "sessionTimeout": "30m",
