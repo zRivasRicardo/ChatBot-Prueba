@@ -1,8 +1,10 @@
 @Regresion
+@allure.label.epic:formulario_basico
 Feature: historia hu-3
   Validar funcionalidad de formularios en hakatools
 
-  @hakatools @formulario_basico
+  @allure.label.story:Story3
+  @hakatools @formulario_basico3
   Scenario Outline: Valido formulario basico en hakatools 2
     Given ingreso a hakatools
     When selecciono la lista "Formularios"
