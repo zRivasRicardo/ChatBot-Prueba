@@ -15,10 +15,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
 
-def camel_to_snake(text):
-    return re.sub(r'(?<!^)(?=[A-Z])', '_', text).lower()
-
-
 def execution_selenium(context):
     if os.getenv('EXECUTION_TYPE') == "localhost":
         context.browser = config_driver_local(context)

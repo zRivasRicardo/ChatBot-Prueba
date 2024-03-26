@@ -7,9 +7,9 @@ Feature: formulario basico
   @allure.label.owner:JohnDoe
   @allure.link:https://dev.example.com/
   @allure.issue:UI-123
-  @allure.tms:TMS-456
-  @test
+  @allure.tms:TMS-454
   @allure.label.story:Story124
+  @testdb
   Scenario: Crear caso Banco tipo solicitud
   Ejemplo de descripcion de escenario
      Given ingreso a hakatools

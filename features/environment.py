@@ -2,6 +2,7 @@ import pluggy
 from dotenv import load_dotenv
 
 from helper.plugins.AllurePlugin import AllurePlugin
+from helper.plugins.DBPlugin import BDPlugin
 from helper.plugins.PluginSpec import PluginSpec
 from helper.plugins.RerunPlugin import RerunPlugin
 from helper.plugins.SeleniumPlugin import SeleniumPlugin
@@ -12,6 +13,7 @@ pm.add_hookspecs(PluginSpec)
 pm.register(SeleniumPlugin())
 pm.register(RerunPlugin())
 pm.register(AllurePlugin())
+pm.register(BDPlugin())
 
 
 def before_all(context):
