@@ -14,6 +14,7 @@ Feature: historia hu-3
     And ingreso direccion permanente <direccion_permanente>
     And selecciono opcion enviar
     Then valido resultados de formulario <usuario><correo><direccion><direccion_permanente>
+
   @HU-21
   Examples: ejecucion combinatoria 21
     | usuario   | correo                | direccion           | direccion_permanente            |

@@ -3,7 +3,7 @@
 Feature: historia hu-2
   Validar funcionalidad de formularios en hakatools
 
-  @allure.label.story:Story2
+
   @hakatools @formulario_basico2
   Scenario Outline: Valido formulario basico en hakatools 1
     Given ingreso a hakatools
@@ -14,7 +14,8 @@ Feature: historia hu-2
     And ingreso direccion permanente <direccion_permanente>
     And selecciono opcion enviar
     Then valido resultados de formulario <usuario><correo><direccion><direccion_permanente>
-  @HU-11
+
+  @test
   Examples: ejecucion combinatoria 11
     | usuario   | correo                | direccion           | direccion_permanente            |
     | "Hakito"  | "hakito@hakalab.com"  | "calle prueba 123"  | "calle permanente prueba 123 "  |
