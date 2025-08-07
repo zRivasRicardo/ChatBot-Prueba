@@ -12,6 +12,7 @@ from helper.selenium_class.keyboard_actions import KeyboardActions
 from helper.selenium_class.mouse_actions import MouseActions
 from helper.selenium_class.window_control import WindowControl
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
 
@@ -41,37 +42,24 @@ def execution_selenium(context):
 def config_driver_local(context, ):
     name_os = system()
     try:
-        rute_driver = str(pathlib.Path().absolute()) + "/helper/selenium_class/web_driver/" + os.getenv('BROWSER') + "/" + name_os+"/"
-        rute_driver = rute_driver.replace("\\", "/")
+        #rute_driver = str(pathlib.Path().absolute()) + "/helper/selenium_class/web_driver/" + os.getenv('BROWSER') + "/" + name_os+"/"
+        #rute_driver = rute_driver.replace("\\", "/")
         if os.getenv('BROWSER') == "chrome":
-            rute_driver += "chromedriver"
-            if name_os == 'Windows':
-                rute_driver += ".exe"
             prefs = {"profile.default_content_setting_values.notifications": 2}
-            chrome_options = webdriver.ChromeOptions()
+            chrome_options = Options()
             chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
             chrome_options.add_experimental_option("prefs", prefs)
-            context.browser = webdriver.Chrome(service=Service(executable_path=rute_driver), options=chrome_options)
+            context.browser = webdriver.Chrome(options=chrome_options)
         elif os.getenv('BROWSER') == "firefox":
-            rute_driver += "geckodriver"
-            if name_os == 'Windows':
-                rute_driver += ".exe"
-            firefox_options = webdriver.FirefoxOptions()
-            firefox_options.binary_location = r'/Applications/Firefox.app/Contents/MacOS/firefox'
-            context.browser = webdriver.Firefox(service=Service(executable_path=rute_driver), options=firefox_options)
+            firefox_options = webdriver.Options()
+            context.browser = webdriver.Firefox(options=firefox_options)
         elif os.getenv('BROWSER') == "opera":
-            rute_driver += "operadriver"
-            if name_os == "Windows":
-                rute_driver += ".exe"
             opera_options = webdriver.ChromeOptions
             #opera_options.add_experimental_option( 'w3c', True)
-            opera_options.binary_location = r'/Applications/Opera.app/Contents/MacOS/Opera'
-            context.browser = webdriver.Chrome(service=Service(executable_path=rute_driver), options=opera_options)
+            context.browser = webdriver.Chrome(options=opera_options)
         elif os.getenv('BROWSER') == "edge":
-            rute_driver = rute_driver + "msedgedriver"
-            if name_os == "Windows":
-                rute_driver += ".exe"
-            context.browser = webdriver.Edge(service=Service(executable_path=rute_driver))
+            context.browser = webdriver.Edge()
+
         elif os.getenv('BROWSER') == "safari":
             try:
                 if name_os == "Windows" or name_os == "Linux":
