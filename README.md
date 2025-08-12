@@ -411,7 +411,7 @@ mkdocs serve
 
 ## Autores ✒️
 __________________________________________________________
-Este repositorio es un esfuerzo de **Haka Lab** para que todos
+Este repositorio es un esfuerzo de **Haka Lab** y **Edgard Mercado** para que todos
 los colaboradores cuenten con un arquetipo base para todas las
 actividades de sus servicios dentro de la organización.
 
