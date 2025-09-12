@@ -132,7 +132,7 @@ class QAlityPlusPlugin:
         is_qality_flag = os.getenv("USE_QALITYPLUS", "false").lower() == "true"
         if is_qality_flag:
             cycle_id = os.getenv("QALITYPLUS_CYCLE_ID")
-            if cycle_id != None:
+            if cycle_id:
                 context.qality = QAlityPlusApiV1(cycle_id)
             else:
                 assert False, "Debes configurar primero el QALITYPLUS_CYCLE_ID correspondiente a tu ejecución"
