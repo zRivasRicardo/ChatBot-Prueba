@@ -83,7 +83,9 @@ def execute_allure_combine():
             folder = str(pathlib.Path().absolute()) + '/reporte'
             shutil.rmtree(folder, ignore_errors=True)
 
-        os.system(f"python3 ./helper/combine.py .{os.sep}report")
+        python_cmd = "python3" if system() != "Windows" else "python"
+        os.system(f"{python_cmd} ./helper/combine.py .{os.sep}report")
+
 
         if os.getenv("CLEAN_EXTRAS_REPORT_ALLURE") == "true":
             os.remove(os.path.join(os.getcwd(), 'report', 'index.html'))
