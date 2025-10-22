@@ -94,3 +94,4 @@ dmypy.json
 .pytype/
 .DS_Store
 
+helper/plugins/AllurePlugin.py

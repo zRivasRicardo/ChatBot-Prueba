@@ -36,15 +36,18 @@ def before_all(context):
 
     # ✅ Crea un perfil de Chrome propio para automatización (sin bloqueo)
     # Usa una copia del perfil real (solo la primera vez debes loguearte a WhatsApp)
-    profile_path = r"C:\Users\ricar\Desktop\practice\chrome_whatsapp_persist"
+# ✅ Crea un perfil de Chrome propio para automatización (sin bloqueo)
+# Usa una copia del perfil real (solo la primera vez debes loguearte a WhatsApp)
+    user_dir = os.path.expanduser("~")
+    profile_path = os.path.join(user_dir, "Desktop", "chrome_whatsapp_persist")
     os.makedirs(profile_path, exist_ok=True)
     chrome_options.add_argument(f"--user-data-dir={profile_path}")
 
     # 🚫 No pongas "--profile-directory", eso bloquea DevToolsActivePort
-    # ⚙️ Evita conflictos de inicialización
     chrome_options.add_argument("--no-first-run")
     chrome_options.add_argument("--no-default-browser-check")
     chrome_options.add_argument("--remote-debugging-port=9222")
+
 
     try:
         service = Service(ChromeDriverManager().install())

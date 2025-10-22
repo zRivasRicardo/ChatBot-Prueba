@@ -60,3 +60,4 @@ Feature: Validar respuestas del chatbot con diferentes palabras clave
     | qr                        |
     | descargar qr              |
     | cupon                     |
+  

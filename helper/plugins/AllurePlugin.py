@@ -66,7 +66,18 @@ def execute_allure_combine():
             os.path.join(os.getcwd(), 'reporte', 'environment.properties'))
         allure.dynamic.label("Total Execution Time", str("total_execution_time"))
 
-        os.system(path_allure + ' generate reporte -o report -c')
+        import subprocess
+
+        try:
+            subprocess.run(
+                [path_allure, 'generate', 'reporte', '-o', 'report', '-c'],
+                check=True,
+                shell=True
+            )
+            print("✅ Reporte Allure generado correctamente.")
+        except Exception as e:
+            print(f"❌ Error ejecutando Allure: {e}")
+
 
         shutil.copy(os.path.join(os.getcwd(), 'helper', 'vendor', 'report-assets', 'index.html'),
                     os.path.join(os.getcwd(), 'report', 'index.html'))
